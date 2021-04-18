@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 
 import reducers from '../reducers';
 
+// Global redux store
 export const store = createStore(
 	reducers,
 	compose(
