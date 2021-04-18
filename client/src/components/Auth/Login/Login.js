@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { Row, Col, Card, Form, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../../redux/actions/authActions';
+import '../Auth.css';
 import './Login.css';
+import login from '../../../assets/sign.svg';
 
 function Login({ history }) {
 	const [user, setUser] = useState({
@@ -16,7 +19,7 @@ function Login({ history }) {
 		if (localStorage.getItem('authToken')) {
 			history.push('/');
 		}
-	}, [history]);
+	}, [isAuthenticated, history]);
 
 	const handleChange = e => {
 		setUser({ ...user, [e.target.id]: e.target.value });
@@ -25,9 +28,6 @@ function Login({ history }) {
 	const handleSubmit = e => {
 		e.preventDefault();
 		dispatch(loginUser(user));
-		if (isAuthenticated) {
-			history.push('/');
-		}
 		setUser({
 			email: '',
 			password: '',
@@ -35,30 +35,55 @@ function Login({ history }) {
 	};
 
 	return (
-		<div>
-			<form className="login_form" onSubmit={handleSubmit}>
-				<h1>Login Form</h1>
-				<div>
-					<label>Email</label>
-					<input
-						type="text"
-						id="email"
-						value={user.email}
-						onChange={handleChange}
-					/>
+		<div className="login">
+			<div className="container">
+				<div className="row">
+					<div className="col-lg-6 col-md-12 col-sm-12">
+						<Card className="text-center">
+							<Card.Header className="bg-color"><Card.Title>Login Form</Card.Title></Card.Header>
+							<Card.Body>
+								<Form onSubmit={handleSubmit}>
+									<Form.Group controlId="email">
+										<Row>
+											<Col sm={3}>
+												<Form.Label>Email address</Form.Label>
+											</Col>
+											<Col>
+												<Form.Control
+													type="email"
+													value={user.email}
+													onChange={handleChange}
+													placeholder="Enter email"
+												/>
+											</Col>
+										</Row>
+									</Form.Group>
+									<Form.Group controlId="password">
+										<Row>
+											<Col sm={3}>
+												<Form.Label>Password</Form.Label>
+											</Col>
+											<Col>
+												<Form.Control
+													type="password"
+													value={user.password}
+													onChange={handleChange}
+													placeholder="Enter Password"
+												/>
+											</Col>
+										</Row>
+									</Form.Group>
+									<Button variant="btn-light" className="bg-color button-color" type="submit"> Login </Button>
+								</Form>
+							</Card.Body>
+						</Card>
+					</div>
+					<div className="col-lg-1 col-md-1 col-sm-1 register_img"></div>
+					<div className="col-lg-5 col-md-12 col-sm-12">
+						<img className="login_img" src={login} />
+					</div>
 				</div>
-				<div>
-					<label>Password</label>
-					<input
-						type="password"
-						id="password"
-						value={user.password}
-						onChange={handleChange}
-					/>
-				</div>
-				<button>Login</button>
-			</form>
-			{/* {error && <span>{error}</span>} */}
+			</div>
 		</div>
 	);
 }
