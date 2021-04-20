@@ -17,18 +17,17 @@ function BuyItem() {
 
 	useEffect(() => {
 		setCrops(buy.items);
-	}, [buy]);
+	}, [buy]);	
 
 	return (
 		<div className="container buyer">
-			{/* <h1>BuyItem {crops.data}</h1> */}
 			{buy.isLoading ? (
 				<h1>Loading...</h1>
 			) : (
 				<Row>
 					{crops.map((crop, id) => (
 						<Col lg={4} md={6} key={id}>
-							<Crops crop={crop} />
+							<Crops crop={crop} id={id}/>
 						</Col>
 					))}
 				</Row>
