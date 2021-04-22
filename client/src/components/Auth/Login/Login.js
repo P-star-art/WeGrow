@@ -5,6 +5,8 @@ import { loginUser } from '../../../redux/actions/authActions';
 import '../Auth.css';
 import './Login.css';
 import login from '../../../assets/sign.svg';
+import { Link } from 'react-router-dom';
+import { clearErrors } from '../../../redux/actions/errorActions';
 
 function Login({ history }) {
 	const [user, setUser] = useState({
@@ -14,10 +16,10 @@ function Login({ history }) {
 
 	const dispatch = useDispatch();
 	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-
-	console.log(isAuthenticated);
+	const error = useSelector(state => state.error.error);
 
 	useEffect(() => {
+		dispatch(clearErrors());
 		if (localStorage.getItem('authToken')) {
 			history.push('/profile');
 			alert('logged in');
@@ -35,8 +37,6 @@ function Login({ history }) {
 			email: '',
 			password: '',
 		});
-		
-			
 	};
 
 	return (
@@ -45,13 +45,17 @@ function Login({ history }) {
 				<div className="row">
 					<div className="col-lg-6 col-md-12 col-sm-12">
 						<Card className="text-center">
-							<Card.Header className="bg-color"><Card.Title>Login Form</Card.Title></Card.Header>
+							<Card.Header className="bg-color">
+								<Card.Title>Login Form</Card.Title>
+							</Card.Header>
 							<Card.Body>
 								<Form onSubmit={handleSubmit}>
 									<Form.Group controlId="email">
 										<Row>
 											<Col sm={3}>
-												<Form.Label>Email address</Form.Label>
+												<Form.Label>
+													Email address
+												</Form.Label>
 											</Col>
 											<Col>
 												<Form.Control
@@ -66,7 +70,9 @@ function Login({ history }) {
 									<Form.Group controlId="password">
 										<Row>
 											<Col sm={3}>
-												<Form.Label>Password</Form.Label>
+												<Form.Label>
+													Password
+												</Form.Label>
 											</Col>
 											<Col>
 												<Form.Control
@@ -78,12 +84,33 @@ function Login({ history }) {
 											</Col>
 										</Row>
 									</Form.Group>
-									<Button variant="btn-light" className="bg-color button-color" type="submit"> Login </Button>
+									<Form.Label className="text-muted">
+										Already have an account?
+										<Link to="/auth/register">
+											<Button
+												variant="btn-light"
+												size="sm"
+											>
+												Register
+											</Button>
+										</Link>
+									</Form.Label>
+									<br />
+									{error && error !== 'No token' && (
+										<Alert variant="danger">{error}</Alert>
+									)}
+									<Button
+										variant="btn-light"
+										className="bg-color button-color"
+										type="submit"
+									>
+										{' '}
+										Login{' '}
+									</Button>
 								</Form>
 							</Card.Body>
 						</Card>
 					</div>
-					<div className="col-lg-1 col-md-1 col-sm-1 register_img"></div>
 					<div className="col-lg-5 col-md-12 col-sm-12">
 						<img className="login_img" src={login} />
 					</div>

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import { Button, Container, Form } from 'react-bootstrap';
+import './Donate.css';
+
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(
@@ -36,11 +38,12 @@ function Donate() {
 			// If `redirectToCheckout` fails due to a browser or network
 			// error, display the localized error message to your customer
 			// using `result.error.message`.
+			console.log(result.error);
 		}
 	};
 
 	return (
-		<Container align="center" className="my-5">
+		<div align="center" className="my-5 p-5 container donate">
 			<Form onSubmit={handleClick}>
 				<h1>Donate Money</h1>
 				<Form.Group controlId="email">
@@ -53,9 +56,11 @@ function Donate() {
 						max="1000000000"
 					/>
 				</Form.Group>
-				<Button role="link">Donate</Button>
+				<Button role="link" variant="btn-light" className="bg-color">
+					Donate
+				</Button>
 			</Form>
-		</Container>
+		</div>
 	);
 }
 
