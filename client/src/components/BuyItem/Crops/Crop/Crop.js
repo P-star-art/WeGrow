@@ -1,86 +1,117 @@
-import React, { useRef, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Card, Button, Col, Row, Carousel, Jumbotron } from 'react-bootstrap';
+import {
+	Card,
+	Col,
+	Row,
+	Carousel,
+	Badge,
+} from 'react-bootstrap';
+
+import Loading from '../../../Loading/Loading';
+import { fetchItems } from '../../../../redux/actions/buyActions';
+import { bidPrice } from '../../../../redux/actions/buyActions';
 import './Crop.css';
 
+function Crop() {
+	const countRef = useRef(0);
+	const [crop, setCrop] = useState({});
+	const [counter, setCounter] = useState(0);
+	const dispatch = useDispatch();
+	const buy = useSelector(state => state.buy);
+	const { id } = useParams();
+	let a;
 
-function Crop(props) {
+	// Fetch Crops
+	useEffect(() => {
+		dispatch(fetchItems());
+	}, []);
 
-    const countRef = useRef(0);
+	useEffect(() => {
+		setCrop(buy.items[id]);
+		setCounter(buy.items[id]?.buyPrice);
+	}, [buy]);
 
-    const [counter, setCounter] = useState(0);
+	// Bidding
+	const counterHandler = () => {
+		a = countRef.current.value;
+		updateBid(a);
+		if (Number(a) > 0) setCounter(Number(a));
+	};
 
-    let a;
-    const counterHandler = () => {
-        a = countRef.current.value;
-        setCounter(prevCount => prevCount + Number(a));
-    }
+	const updateBid = a => {
+		if (Number(a) > counter) dispatch(bidPrice(crop._id, Number(a)));
+	};
 
-    const addHandler = () => {
-        setCounter(prevCount => prevCount + 1);
-    }
+	return (
+		<div className="crop">
+			{crop && id > -1 ? (
+				<>
+					<Row>
+						<Col lg={7} md={12} sm={12} className="mx-auto">
+							<Card className="crop-card">
+								<div className="crop-inside">
+									<Carousel>
+										{
+											crop?.selectedFile?.map((img, index) => (
 
-    const subtractHandler = () => {
-        setCounter(prevCount => prevCount - 1);
-    }
+												<Carousel.Item key={index}>
+													<img
+														// className="d-block w-100"
+														src={img}
+														alt="First slide"
+													/>
+												</Carousel.Item>
 
-    const { id } = useParams();
+											))
+										}
+									</Carousel>
+									<Card.Body>
+										<Card.Title>
+											Crop Name: {crop.title}{' '}
+										</Card.Title>
+										<Card.Text>
+											{crop.description}
+										</Card.Text>
+										<Card.Title>
+											<Badge variant="success">
+												Price: {counter}
+											</Badge>
+										</Card.Title>
+									</Card.Body>
+								</div>
+							</Card>
+						</Col>
 
-    return (
-        <div className="crop">
-            <Row>
-                <Col lg={12} md={12} sm={12}>
-                    <Card className="crop-card" style={{ width: '18rem' }}>
-                        {/* <Card.Img variant="top" src="https://media.nationalgeographic.org/assets/photos/120/983/091a0e2f-b93d-481b-9a60-db520c87ec33.jpg" /> */}
-                        <Carousel>
-                            <Carousel.Item>
-                                <img
-                                    className="d-block w-100"
-                                    src="https://media.nationalgeographic.org/assets/photos/120/983/091a0e2f-b93d-481b-9a60-db520c87ec33.jpg"
-                                    alt="First slide"
-                                />
-                            </Carousel.Item>
-                            <Carousel.Item>
-                                <img
-                                    className="d-block w-100"
-                                    src="https://media.nationalgeographic.org/assets/photos/120/983/091a0e2f-b93d-481b-9a60-db520c87ec33.jpg"
-                                    alt="Second slide"
-                                />
-                            </Carousel.Item>
-                            <Carousel.Item>
-                                <img
-                                    className="d-block w-100"
-                                    src="https://media.nationalgeographic.org/assets/photos/120/983/091a0e2f-b93d-481b-9a60-db520c87ec33.jpg"
-                                    alt="Third slide"
-                                />
-                            </Carousel.Item>
-                        </Carousel>
-                        <Card.Body>
-                            <Card.Title>Crop Name</Card.Title>
-                            <Card.Text>
-                                Some quick example text to build on the card title and make up the bulk of
-                                the card's content.
-                   </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col className="my-5" style={{ textAlign: "center" }} md={12} lg={12} sm={12}>
-                    <div className="bid_info">
-                        <h4>Highest Bid Till now: 320</h4>
-                        <h5>Want to place higher Bid? </h5>
-                        <input ref={countRef} value={a} type="number" min={0} max={1000000} />
-                        <button onClick={counterHandler}>Add</button>
-                        {/* <button onClick={addHandler}>+</button>
-                        <button onClick={subtractHandler}>-</button> */}
-                    </div>
-                </Col>
-            </Row>
-
-            <h2>Bid</h2>
-            <div>{counter}</div>
-        </div>
-    )
+						<Col
+							className="my-5"
+							style={{ textAlign: 'center' }}
+							md={12}
+							lg={12}
+							sm={12}
+						>
+							<div className="bid_info">
+								<h4>Highest Bid Till now: {counter}</h4>
+								<h5>Want to place higher Bid? </h5>
+								<input
+									ref={countRef}
+									type="number"
+									min={0}
+									max={1000000}
+								/>
+								<button className="btn btn-light bg-color pl-3 pr-3 pt-0 pb-0 ml-1" onClick={counterHandler}>Add</button>								
+							</div>
+						</Col>
+					</Row>
+					<h2>Bid</h2>
+					<div>{counter}</div>
+				</>
+			) : (
+				<Loading />
+			)}
+		</div>
+	);
 }
 
 export default Crop;

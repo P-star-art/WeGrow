@@ -1,8 +1,27 @@
-.footer{
-  background: #10B981;
-  text-align: center;
-  padding: 30px;
-  color: #6B7280;
-  font-size: 20px;
-  font-weight: 700;
+.footer {
+	background: #10b981;
+	text-align: center;
+	padding: 30px;
+	/* color: #6B7280; */
+	font-size: 20px;
+	font-weight: 700;
+}
+
+.footer-link {
+	color: #000;
+}
+
+.footer-link:hover {
+	text-decoration: none;
+	color: #24282c;
+}
+
+.copyright {
+	margin-top: 100px;
+	font-size: 15px;
+}
+
+.weGrow {
+	width: 200px;
+	margin: 30px;
 }

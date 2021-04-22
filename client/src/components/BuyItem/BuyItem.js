@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Crops from './Crops/Crops';
+import Loading from '../Loading/Loading'
 import './BuyItem.css';
 
 import { fetchItems } from '../../redux/actions/buyActions';
@@ -17,18 +18,17 @@ function BuyItem() {
 
 	useEffect(() => {
 		setCrops(buy.items);
-	}, [buy]);
+	}, [buy]);	
 
 	return (
 		<div className="container buyer">
-			{/* <h1>BuyItem {crops.data}</h1> */}
 			{buy.isLoading ? (
-				<h1>Loading...</h1>
+				<Loading />
 			) : (
 				<Row>
 					{crops.map((crop, id) => (
 						<Col lg={4} md={6} key={id}>
-							<Crops crop={crop} />
+							<Crops crop={crop} id={id}/>
 						</Col>
 					))}
 				</Row>

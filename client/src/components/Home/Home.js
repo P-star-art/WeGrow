@@ -1,7 +1,9 @@
 import React from 'react';
-import AuthenticatedToast from '../Auth/AuthenticatedToast/AuthenticatedToast';
+import DonateContainer from '../DonateContainer/DonateContainer';
+import Feedback from '../Feedback/Feedback';
 import Banner from './Banner/Banner';
 import './Home.css';
+import Testimonials from './Testimonials/Testimonials';
 
 function Home() {
 	return (
@@ -25,8 +27,14 @@ function Home() {
 						<Banner />
 					</div>
 				</div>
+				<div className="row">
+					<DonateContainer />
+				</div>
+				<div className="row">
+					<Feedback />
+				</div>
 			</div>
-			<AuthenticatedToast />
+			{/* <Testimonials /> */}
 		</div>
 	);
 }

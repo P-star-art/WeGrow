@@ -1,6 +1,7 @@
-.crop{
-    text-align: center;
+#root > div > div {
+margin-top: 85px;
 }
+
 .crop-card{
     margin: auto;
 }
@@ -12,4 +13,24 @@
     margin: auto;
     border: 1px solid;
     border-radius: 10px
+}
+
+.crop-inside{
+    display: flex;
+    justify-content: space-between;
+}
+
+.bg-color {
+	background: rgb(16, 185, 129, 0.1);
+	border-color: rgb(107,114,128);
+}
+
+.bg-color:hover {
+	background: rgb(16, 185, 129);
+}
+
+@media screen and (max-width: 480px){
+    .crop-inside{
+    display: block;
+    }
 }

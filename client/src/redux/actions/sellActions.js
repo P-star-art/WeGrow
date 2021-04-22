@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { SELL_ITEM_FAIL, SELL_ITEM_SUCCESS } from '../constants/sellConstants';
+import { clearErrors, returnErrors } from './errorActions';
 
 export const sellItem = item => async dispatch => {
+	dispatch(clearErrors());
+
 	// Request headers
 	const config = {
 		headers: {
@@ -21,6 +24,6 @@ export const sellItem = item => async dispatch => {
 		})
 		.catch(err => {
 			dispatch({ type: SELL_ITEM_FAIL });
-			// dispatch(returnErrors('Register failed', 404));
+			dispatch(returnErrors(err.response.data.error));
 		});
 };
